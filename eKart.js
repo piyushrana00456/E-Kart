@@ -120,6 +120,23 @@ function Find(arr){
     return temp;
 }
 
+//--------------------------------------------------------------total product-------------------------------
+ app.get("/totalProduct",async function(req,res){
+    try{
+        const fashion=await Fashion.find().populate("colorId").lean().exec()
+       
+        return res.status(200).send({"total product":fashion.length})
+    } 
+    catch(err){
+        return res.status(400).send(err.message)
+    }
+ 
+ })
+
+ 
+
+
+
 //---------------------------------------------------------CRUD for color----------------------------------------------------------------
 
 app.post("/colors",async function(req,res){
@@ -141,6 +158,8 @@ app.get("/colors",async function(req,res){
         return res.status(400).send(err.message)
     }
 })
+
+
 
 app.listen(2999,async()=>{
    await connect();
