@@ -17,7 +17,25 @@ const connect=()=>{
 }
 
 
-const productSchema=new mongoose.Schema({
+const fashionSchema=new mongoose.Schema({
+    product_name:{type:String,required:true},
+    product_price:{type:Number,required:true},
+    product_category:{type:String,required:true}
+},{
+    versionKey:false
+})
+
+const Fashion=mongoose.model("fashion",fashionSchema);
+
+const accessorySchema=new mongoose.Schema({
     product_name:{type:String,required:true},
     product_price:{type:Number,required:true},
 })
+
+const Accessory=mongoose.model("accessory",accessorySchema);
+
+
+
+
+
+
