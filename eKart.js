@@ -124,8 +124,8 @@ function Find(arr){
  app.get("/totalProduct",async function(req,res){
     try{
         const fashion=await Fashion.find().populate("colorId").lean().exec()
-       
-        return res.status(200).send({"total product":fashion.length})
+        let totalColor=Count(fashion);
+        return res.status(200).send({"total product":fashion.length+totalColor})
     } 
     catch(err){
         return res.status(400).send(err.message)
@@ -133,7 +133,40 @@ function Find(arr){
  
  })
 
+ function Count(arr){
+     var count=0;
+     for(var i=0;i<arr.length; i++){
+         count+=arr[i].colorId.length;
+     }
+     return count
+ }
+
+ //---------------------------------------------------------------product which have the max no of color-----------------------------
+
+ app.get("/maxColor",async function(req,res){
+    try{
+        const fashion=await Fashion.find().populate("colorId").lean().exec()
+        let totalColor=Count(fashion);
+        return res.status(200).send({"totalColor":totalColor})
+    } 
+    catch(err){
+        return res.status(400).send(err.message)
+    }
  
+ });
+ function Count(arr){
+ var max=0;
+     var count=0;
+     for(var i=0;i<arr.length; i++){
+         count=arr[i].colorId.length;
+        if(count>max){
+            max=count
+        }
+     }
+     return max
+ }
+
+
 
 
 
