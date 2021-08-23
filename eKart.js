@@ -84,10 +84,22 @@ app.get("/fashions",async function(req,res){
  
 })
 
-app.get("/fashion/:id/color",async function(req,res){
+app.get("/fashionss",async function(req,res){
     try{
-        const fashion=await Fashion.find({colorId:{$gt:colorId._id}}).populate("colorId").lean().exec()
+        const fashion=await Fashion.find({product_for:{$et:"Male"}}).populate("colorId").lean().exec()
         return res.status(200).send(fashion)
+    } 
+    catch(err){
+        return res.status(400).send(err.message)
+    }
+ 
+})
+
+app.get("/fashion/color/:id",async function(req,res){
+    try{
+        const productColor=await Color.findById({colorId:req.params.id}).lean().exec()
+        const fashion=await Fashion.find().populate("colorId").lean().exec()
+        return res.status(200).json({productColor:productColor,fashion:fashion})
     } 
     catch(err){
         return res.status(400).send(err.message)
