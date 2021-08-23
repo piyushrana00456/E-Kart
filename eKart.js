@@ -21,7 +21,7 @@ const fashionSchema=new mongoose.Schema({
     product_name:{type:String,required:true},
     product_price:{type:Number,required:true},
     product_category:{type:String,required:true},
-    product_for:{type:String,required:true},
+    product_for:[{type:String,required:true}],
     colorId:[{type :mongoose.Schema.Types.ObjectId,
     ref:"color",
        required:true}]
@@ -51,9 +51,9 @@ const Color=mongoose.model("color",colorSchema);
 
 //-------------------------------------------------CRUD-- for Faishon-------------------------------------------------------
 
-app.post("/faishon",async function(req,res){
+app.post("/fashion",async function(req,res){
     try{
-        const fashion=await Faishon.create(req.body)
+        const fashion=await Fashion.create(req.body)
         return res.status(200).send(fashion);
     }
     catch(err){
@@ -63,7 +63,19 @@ app.post("/faishon",async function(req,res){
 
 app.get("/fashion",async function(req,res){
     try{
-        const fashion=await Faishon.find().lean().exec()
+        const fashion=await Fashion.find().populate("colorId").lean().exec()
+        return res.status(200).send(fashion)
+    } 
+    catch(err){
+        return res.status(400).send(err.message)
+    }
+ 
+})
+
+
+app.get("/fashion",async function(req,res){
+    try{
+        const fashion=await Fashion.find({product_price}).populate("colorId").lean().exec()
         return res.status(200).send(fashion)
     } 
     catch(err){
