@@ -73,9 +73,9 @@ app.get("/fashion",async function(req,res){
 })
 
 
-app.get("/fashion",async function(req,res){
+app.get("/fashions",async function(req,res){
     try{
-        const fashion=await Fashion.find({product_price}).populate("colorId").lean().exec()
+        const fashion=await Fashion.find({product_price:{$gte:500}}).populate("colorId").lean().exec()
         return res.status(200).send(fashion)
     } 
     catch(err){
@@ -84,6 +84,16 @@ app.get("/fashion",async function(req,res){
  
 })
 
+app.get("/fashion/:id/color",async function(req,res){
+    try{
+        const fashion=await Fashion.find({colorId:{$gt:colorId._id}}).populate("colorId").lean().exec()
+        return res.status(200).send(fashion)
+    } 
+    catch(err){
+        return res.status(400).send(err.message)
+    }
+ 
+})
 
 //---------------------------------------------------------CRUD for color----------------------------------------------------------------
 
