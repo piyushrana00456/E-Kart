@@ -72,7 +72,7 @@ app.get("/fashion",async function(req,res){
  
 })
 
-
+//------------------------------------------------get product having price gt 300------------------------------------
 app.get("/fashions",async function(req,res){
     try{
         const fashion=await Fashion.find({product_price:{$gte:500}}).populate("colorId").lean().exec()
@@ -84,9 +84,10 @@ app.get("/fashions",async function(req,res){
  
 })
 
+//----------------------------------------------------get product those have both men & women---------------------------------
 app.get("/fashionss",async function(req,res){
     try{
-        const fashion=await Fashion.find({product_for:{$et:"Male"}}).populate("colorId").lean().exec()
+        const fashion=await Fashion.find({$and:[{product_for:{$eq:"Men"}},{product_for:{$eq:"Women"}}]}).populate("colorId").lean().exec()
         return res.status(200).send(fashion)
     } 
     catch(err){
@@ -95,17 +96,29 @@ app.get("/fashionss",async function(req,res){
  
 })
 
-app.get("/fashion/color/:id",async function(req,res){
+//-----------------------------------------------get product having color gt 3------------------------------------------------
+
+app.get("/fashionColor",async function(req,res){
     try{
-        const productColor=await Color.findById({colorId:req.params.id}).lean().exec()
         const fashion=await Fashion.find().populate("colorId").lean().exec()
-        return res.status(200).json({productColor:productColor,fashion:fashion})
+        let collection= Find(fashion);
+        return res.status(200).send(collection)
     } 
     catch(err){
         return res.status(400).send(err.message)
     }
  
 })
+
+function Find(arr){
+    var temp=[]
+    for(var i=0;i<arr.length; i++){
+        if(arr[i].colorId.length>3){
+            temp.push(arr[i])
+        }
+    }
+    return temp;
+}
 
 //---------------------------------------------------------CRUD for color----------------------------------------------------------------
 
